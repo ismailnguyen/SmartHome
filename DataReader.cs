@@ -4,16 +4,20 @@ using SmartHome.Models;
 using System.Linq;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.IO;
+using System;
 
 namespace SmartHome
 {
     public class DataReader
     {
         private XDocument _doc;
+        private string[] _netatmoDatas;
 
         public DataReader()
         {
             _doc = XDocument.Load("../../../datas/capteurs.xtim");
+            _netatmoDatas = Directory.GetFiles(@"../../../datas/netatmo/", "*.dt", SearchOption.AllDirectories);
         }
 
         public List<Capteur> read()
@@ -75,10 +79,27 @@ namespace SmartHome
         {
             var datas = new List<SmartData>();
 
-            //TO-DO:
-            //Read .dt files
-            //Get lines according to parameter 'id'
-            //Add to datas
+            foreach (string filePath in _netatmoDatas)
+            {
+                foreach (string line in File.ReadLines("@" + filePath))
+                {              
+                    var elements = line.Split(' ');
+
+                    if (elements[2].Equals(id))
+                    {
+                        var data = new SmartData()
+                        {
+                            Date = DateTime.Parse(
+                                elements[0].Substring(1)
+                                + elements[1].Substring(0, elements[1].Length - 1)
+                            ),
+                            Valeur = double.Parse(elements[3])
+                        };
+
+                        datas.Add(data);
+                    }
+                }
+            }
 
             return datas;
         }
