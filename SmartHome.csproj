@@ -67,6 +67,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\SmartData.cs" />
+    <Compile Include="ViewModels\BaseCapteur.cs" />
+    <Compile Include="ViewModels\Humidité.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,9 +90,8 @@
   <ItemGroup>
     <Compile Include="Models\Capteur.cs" />
     <Compile Include="Models\GrandeurCapteur.cs" />
-    <Compile Include="Models\Humidité.cs" />
     <Compile Include="Models\SeuilCapteur.cs" />
-    <Compile Include="Models\SmartHome.cs" />
+    <Compile Include="MainApplication.cs" />
     <Compile Include="Models\ValeurCapteur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

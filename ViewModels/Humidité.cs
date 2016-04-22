@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
 using OxyPlot;
-using System;
 
-namespace SmartHome.Models
+namespace SmartHome.ViewModels
 {
-    public class Humidité
+    public class Humidité : BaseCapteur
     {
-        public string Title { get; private set; }
-        public IList<DataPoint> Points { get; private set; }
-
         public Humidité()
         {
             Title = "Humidité";
@@ -21,10 +17,6 @@ namespace SmartHome.Models
                 new DataPoint(40, 12),
                 new DataPoint(50, 12)
             };
-
-            var dataReader = new DataReader();
-            var datas = dataReader.read();
-            Console.Write(datas);
         }
     }
 }
