@@ -8,8 +8,8 @@ namespace SmartHome.Models
 {
     public class GrandeurCapteur
     {
-        public string nom { get; set; }
-        public string unite { get; set; }
-        public string abreviation { get; set; }
+        public string Nom { get; set; }
+        public string Unite { get; set; }
+        public string Abreviation { get; set; }
     }
 }

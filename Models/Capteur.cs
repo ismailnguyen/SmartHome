@@ -10,5 +10,7 @@ namespace SmartHome.Models
         public GrandeurCapteur Grandeur { get; set; }
         public string Box { get; set; }
         public string Lieu { get; set; }
+
+        public List<SeuilCapteur> Seuils { get; set; }
     }
 }

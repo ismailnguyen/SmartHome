@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using OxyPlot;
+using System;
 
 namespace SmartHome.Models
 {
@@ -21,7 +22,9 @@ namespace SmartHome.Models
                 new DataPoint(50, 12)
             };
 
-            new DataReader();
+            var dataReader = new DataReader();
+            var datas = dataReader.read();
+            Console.Write(datas);
         }
     }
 }

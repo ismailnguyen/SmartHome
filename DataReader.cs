@@ -20,7 +20,7 @@ namespace SmartHome
         {
             var capteurs = new List<Capteur>();
 
-            foreach (XElement node in _doc.Descendants("capteurs"))
+            foreach (XElement node in _doc.Descendants("capteurs").Nodes())
             {
                 capteurs.Add(new Capteur()
                 {
@@ -29,9 +29,9 @@ namespace SmartHome
                     Description = node.Element("description").Value,
                     Grandeur = new GrandeurCapteur()
                     {
-                        nom = node.Element("grandeur").Attribute("nom").Value,
-                        unite = node.Element("grandeur").Attribute("unite").Value,
-                        abreviation = node.Element("grandeur").Attribute("abreviation").Value
+                        Nom = node.Element("grandeur").Attribute("nom").Value,
+                        Unite = node.Element("grandeur").Attribute("unite").Value,
+                        Abreviation = node.Element("grandeur").Attribute("abreviation").Value
                     },
                     Box = node.Element("box").Value,
                     Lieu = node.Element("lieu").Value
