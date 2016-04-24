@@ -91,7 +91,7 @@
     <Compile Include="Models\Capteur.cs" />
     <Compile Include="Models\GrandeurCapteur.cs" />
     <Compile Include="Models\SeuilCapteur.cs" />
-    <Compile Include="MainApplication.cs" />
+    <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Models\ValeurCapteur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

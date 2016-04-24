@@ -1,14 +1,14 @@
 ﻿using SmartHome.Models;
 using System.Collections.Generic;
 
-namespace SmartHome
+namespace SmartHome.Repositories
 {
-    public class MainApplication
+    public class BaseRepository
     {
         private DataReader _dataReader;
         public List<Capteur> Capteurs { get; set; }
 
-        public MainApplication()
+        public BaseRepository()
         {
             _dataReader = new DataReader();
             Capteurs = _dataReader.read();
