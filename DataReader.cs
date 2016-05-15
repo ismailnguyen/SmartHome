@@ -15,7 +15,7 @@ namespace SmartHome
         public DataReader()
         {
             _doc = XDocument.Load("../../../datas/capteurs.xtim");
-            _netatmoDatas = Directory.GetFiles(@"../../../datas/netatmo/", "*.dt", SearchOption.AllDirectories);
+            _netatmoDatas = Directory.GetFiles("../../../datas/netatmo/", "*.dt", SearchOption.AllDirectories);
         }
 
         public List<Capteur> read()
@@ -33,43 +33,104 @@ namespace SmartHome
         {
             var capteurs = new List<Capteur>();
 
-            foreach (XElement node in _doc.Descendants("capteurs").Nodes())
+            if (_doc.Descendants("capteurs") != null)
             {
-                var capteur = new Capteur()
+                foreach (XElement node in _doc.Descendants("capteurs").Nodes())
                 {
-                    Type = TypeCapteurConverter.convert(node.Attribute("type").Value),
-                    Id = node.Element("id").Value,
-                    Description = node.Element("description").Value,
-                    Grandeur = new GrandeurCapteur()
-                    {
-                        Nom = node.Element("grandeur").Attribute("nom").Value,
-                        Unite = node.Element("grandeur").Attribute("unite").Value,
-                        Abreviation = node.Element("grandeur").Attribute("abreviation").Value
-                    },
-                    Valeur = new ValeurCapteur()
-                    {
-                        Type = node.Element("valeur").Attribute("type").Value,
-                        Min = double.Parse(node.Element("valeur").Attribute("min").Value),
-                        Max = double.Parse(node.Element("valeur").Attribute("max").Value)
-                    },
-                    Box = node.Element("box").Value,
-                    Lieu = node.Element("lieu").Value
-                };
+                    var capteur = new Capteur();
 
-                foreach (XElement nodeSeuil in node.Descendants("seuils").Nodes())
-                {
-                    var seuil = new SeuilCapteur()
+                    if (node.Attribute("type") != null)
                     {
-                        Description = nodeSeuil.Document.Element("seuil").Attribute("description").Value,
-                        Valeur = double.Parse(nodeSeuil.Document.Element("seuil").Attribute("valeur").Value)
-                    };
+                        capteur.Type = TypeCapteurConverter.convert(node.Attribute("type").Value);
+                    }
 
-                    capteur.Seuils.Add(seuil);
+                    if (node.Element("id") != null)
+                    {
+                        capteur.Id = node.Element("id").Value;
+                    }
+
+                    if (node.Element("description") != null)
+                    {
+                        capteur.Description = node.Element("description").Value;
+                    }
+
+                    if (node.Element("grandeur") != null)
+                    {
+                        capteur.Grandeur = new GrandeurCapteur();
+
+                        if (node.Element("grandeur").Attribute("nom") != null)
+                        {
+                            capteur.Grandeur.Nom = node.Element("grandeur").Attribute("nom").Value;
+                        }
+
+                        if (node.Element("grandeur").Attribute("unite") != null)
+                        {
+                            capteur.Grandeur.Unite = node.Element("grandeur").Attribute("unite").Value;
+                        }
+
+                        if (node.Element("grandeur").Attribute("abreviation") != null)
+                        {
+                            capteur.Grandeur.Abreviation = node.Element("grandeur").Attribute("abreviation").Value;
+                        }
+                    }
+
+                    if (node.Element("valeur") != null)
+                    {
+                        capteur.Valeur = new ValeurCapteur();
+
+                        if (node.Element("valeur").Attribute("type") != null)
+                        {
+                            capteur.Valeur.Type = node.Element("valeur").Attribute("type").Value;
+                        }
+
+                        if (node.Element("valeur").Attribute("min") != null)
+                        {
+                            capteur.Valeur.Min = double.Parse(node.Element("valeur").Attribute("min").Value);
+                        }
+
+                        if (node.Element("valeur").Attribute("max") != null)
+                        {
+                            capteur.Valeur.Max = double.Parse(node.Element("valeur").Attribute("max").Value);
+                        }
+                    }
+
+                    if (node.Element("box") != null)
+                    {
+                        capteur.Box = node.Element("box").Value;
+                    }
+
+                    if (node.Element("lieu") != null)
+                    {
+                        capteur.Lieu = node.Element("lieu").Value;
+                    }
+
+                    if (node.Descendants("seuils") != null)
+                    {
+                        foreach (XElement nodeSeuil in node.Descendants("seuils").Nodes())
+                        {
+                            if (nodeSeuil.Document.Element("seuil") != null)
+                            {
+                                var seuil = new SeuilCapteur();
+
+                                if (nodeSeuil.Document.Element("seuil").Attribute("description") != null)
+                                {
+                                    seuil.Description = nodeSeuil.Document.Element("seuil").Attribute("description").Value;
+                                }
+
+                                if (nodeSeuil.Document.Element("seuil").Attribute("valeur") != null)
+                                {
+                                    seuil.Valeur = double.Parse(nodeSeuil.Document.Element("seuil").Attribute("valeur").Value);
+                                }
+
+                                capteur.Seuils.Add(seuil);
+                            }
+                        }
+                    }
+
+                    capteurs.Add(capteur);
                 }
-
-                capteurs.Add(capteur);
             }
-
+            
             return capteurs;
         }
 
@@ -79,22 +140,21 @@ namespace SmartHome
 
             foreach (string filePath in _netatmoDatas)
             {
-                foreach (string line in File.ReadLines("@" + filePath))
+                foreach (string line in File.ReadLines("@" + Path.Combine(Directory.GetCurrentDirectory(), "\\../" + filePath)))
                 {              
                     var elements = line.Split(' ');
 
                     if (elements[2].Equals(id))
                     {
-                        var data = new SmartData()
+                        datas.Add(new SmartData()
                         {
+                            Valeur = double.Parse(elements[3].Replace(',', '.')),
                             Date = DateTime.Parse(
                                 elements[0].Substring(1)
+                                + " "
                                 + elements[1].Substring(0, elements[1].Length - 1)
-                            ),
-                            Valeur = double.Parse(elements[3])
-                        };
-
-                        datas.Add(data);
+                            )
+                        });
                     }
                 }
             }
