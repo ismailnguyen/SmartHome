@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SmartHome.Repositories;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using SmartHome.ViewModels;
+using System.Collections.Generic;
 
 namespace SmartHome
 {
@@ -20,9 +12,62 @@ namespace SmartHome
     /// </summary>
     public partial class MainWindow : Window
     {
+        private BaseRepository _repository;
+        //private Plotter _plotter;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            //_plotter = new Plotter();
+
+            _repository = new BaseRepository();
+            drawGraphs();
+            initCombos();
+        }
+
+        private void drawGraphs()
+        {
+            foreach (var capteur in _repository.Capteurs)
+            {
+                if (capteur.Id == "temperaturearrieremaison")
+                {
+                    var lineSerie = new LineSeries()
+                    {
+                        StrokeThickness = 2,
+                        MarkerSize = 3,
+                        CanTrackerInterpolatePoints = false,
+                        Title = capteur.Description,
+                        Smooth = false,
+                    };
+
+                    foreach (var data in capteur.Datas)
+                    {
+                        lineSerie.Points.Add(
+                            new OxyPlot.DataPoint(
+                                DateTimeAxis.ToDouble(data.Date),
+                                data.Valeur
+                            )
+                        );
+                    }
+
+                    Plotter.Capteur.Series.Add(lineSerie);
+                }
+            }
+        }
+
+        private void initCombos()
+        {
+            foreach (var capteur in _repository.Capteurs)
+            {
+                if (!choice_box.Items.Contains(capteur.Box))
+                {
+                    choice_box.Items.Add(capteur.Box);
+                }
+            }
+            
+            choice_lieu.IsEnabled = false;
+            choice_date.IsEnabled = false;
         }
     }
 }

@@ -68,8 +68,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\SmartData.cs" />
-    <Compile Include="ViewModels\BaseCapteur.cs" />
-    <Compile Include="ViewModels\Humidité.cs" />
+    <Compile Include="ViewModels\Capteur.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,7 +80,7 @@
     <Compile Include="Converters\TypeCapteurConverter.cs" />
     <Compile Include="DataReader.cs" />
     <Compile Include="Enums\TypeCapteur.cs" />
-    <Compile Include="MainViewModel.cs" />
+    <Compile Include="Plotter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

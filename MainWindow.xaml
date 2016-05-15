@@ -1,19 +1,35 @@
-﻿<Window x:Class="SmartHome.MainWindow"
+﻿<Window 
+        x:Class="SmartHome.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:local="clr-namespace:SmartHome"
-        Title="Humidité" Height="350" Width="525">
+        Title="Plotter"
+        MinHeight="400"
+        MinWidth="600"
+        Height="600" 
+        Width="1200">
 
     <Window.DataContext>
-        <local:MainViewModel />
+        <local:Plotter />
     </Window.DataContext>
 
     <Grid>
-        <oxy:Plot Title="{Binding Humidité.Title}">
-            <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Humidité.Points}" />
-            </oxy:Plot.Series>
-        </oxy:Plot>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <Label Grid.Column="0" Margin="25, 25, 25, 25" x:Name="label_box" Content="Box" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ComboBox Grid.Column="0" Margin="25, 50, 25, 25" x:Name="choice_box" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200"/>
+
+        <Label Grid.Column="0" Margin="25, 100, 25, 25" x:Name="label_lieu" Content="Lieu" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ComboBox Grid.Column="0" Margin="25, 125, 25, 25" x:Name="choice_lieu" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200"/>
+
+        <Label Grid.Column="0" Margin="25, 175, 25, 25" x:Name="label_date" Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ComboBox Grid.Column="0" Margin="25, 200, 25, 25" x:Name="choice_date" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200"/>
+
+        <oxy:PlotView Grid.Column="1" Model="{Binding Capteur}"/>
     </Grid>
 </Window>
