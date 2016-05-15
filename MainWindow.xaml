@@ -2,17 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:oxy="http://oxyplot.org/wpf"
-        xmlns:local="clr-namespace:SmartHome.ViewModels"
+        xmlns:local="clr-namespace:SmartHome"
         Title="Humidité" Height="350" Width="525">
 
     <Window.DataContext>
-        <local:Humidité />
+        <local:MainViewModel />
     </Window.DataContext>
-    
+
     <Grid>
-        <oxy:Plot Title="{Binding Title}">
+        <oxy:Plot Title="{Binding Humidité.Title}">
             <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Points}" />
+                <oxy:LineSeries ItemsSource="{Binding Humidité.Points}" />
             </oxy:Plot.Series>
         </oxy:Plot>
     </Grid>

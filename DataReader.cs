@@ -1,7 +1,5 @@
-﻿
-using SmartHome.Converters;
+﻿using SmartHome.Converters;
 using SmartHome.Models;
-using System.Linq;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.IO;

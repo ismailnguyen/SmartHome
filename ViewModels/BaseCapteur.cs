@@ -5,7 +5,7 @@ namespace SmartHome.ViewModels
 {
     public abstract class BaseCapteur
     {
-        protected string Title { get; set; }
-        protected IList<DataPoint> Points { get; set; }
+        public string Title { get; set; }
+        public IList<DataPoint> Points { get; set; }
     }
 }
