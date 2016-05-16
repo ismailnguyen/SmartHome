@@ -22,7 +22,7 @@ namespace SmartHome.ViewModels
             {
                 Position = AxisPosition.Bottom,
                 Title = "Temps",
-                StringFormat = "dd/MM/yy HH:mm",
+                StringFormat = "HH:mm",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 IntervalLength = 80
