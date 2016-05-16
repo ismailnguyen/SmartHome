@@ -2,12 +2,11 @@
 using System.Windows;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using SmartHome.ViewModels;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
+using OxyPlot;
 
 namespace SmartHome
 {
@@ -24,10 +23,10 @@ namespace SmartHome
 
             _repository = new BaseRepository();
 
-            initCombos();
+            initFields();
         }
 
-        private void initCombos()
+        private void initFields()
         {
             foreach (var capteur in _repository.Capteurs)
             {
@@ -38,6 +37,7 @@ namespace SmartHome
             }
             
             choiceLieu.IsEnabled = false;
+            choiceGrandeur.IsEnabled = false;
             calendar.IsEnabled = false;
         }
 
@@ -71,10 +71,11 @@ namespace SmartHome
 
         private void choiceLieu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            choiceGrandeur.Items.Clear();
+
             var choice = sender as ComboBox;
             var selectedItem = choice.SelectedItem as string;
             string box = choiceBox.SelectedItem as string;
-            var dates = new List<DateTime>();
 
             if (selectedItem != null && selectedItem.Length > 0)
             {
@@ -82,6 +83,37 @@ namespace SmartHome
                 {
                     if (capteur.Box == box
                         && capteur.Lieu == selectedItem)
+                    {
+                        if (!choiceGrandeur.Items.Contains(capteur.Grandeur.Nom))
+                        {
+                            choiceGrandeur.Items.Add(capteur.Grandeur.Nom);
+                        }
+                    }
+                }
+
+                choiceGrandeur.IsEnabled = true;
+            }
+            else
+            {
+                choiceGrandeur.IsEnabled = false;
+            }
+        }
+
+        private void choiceGrandeur_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var choice = sender as ComboBox;
+            var selectedItem = choice.SelectedItem as string;
+            string box = choiceBox.SelectedItem as string;
+            string lieu = choiceLieu.SelectedItem as string;
+            var dates = new List<DateTime>();
+
+            if (selectedItem != null && selectedItem.Length > 0)
+            {
+                foreach (var capteur in _repository.Capteurs)
+                {
+                    if (capteur.Box == box
+                        && capteur.Lieu == lieu
+                        && capteur.Grandeur.Nom == selectedItem)
                     {
                         foreach (var data in capteur.Datas)
                         {
@@ -95,24 +127,27 @@ namespace SmartHome
                     }
                 }
 
-                var firstDate = dates.First();
-                var lastDate = dates.Last();
-                var dateCounter = firstDate;
-
-
-                foreach (var d in dates.Skip(1))
+                if (dates.Count > 0)
                 {
-                    if (d.AddDays(-1).Date != dateCounter.Date)
+                    var firstDate = dates.First();
+                    var lastDate = dates.Last();
+                    var dateCounter = firstDate;
+
+
+                    foreach (var d in dates.Skip(1))
                     {
-                        calendar.BlackoutDates.Add(
-                            new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
+                        if (d.AddDays(-1).Date != dateCounter.Date)
+                        {
+                            calendar.BlackoutDates.Add(
+                                new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
+                        }
+
+                        dateCounter = d;
                     }
 
-                    dateCounter = d;
+                    calendar.DisplayDateStart = firstDate;
+                    calendar.DisplayDateEnd = lastDate;
                 }
-
-                calendar.DisplayDateStart = firstDate;
-                calendar.DisplayDateEnd = lastDate;
 
                 calendar.IsEnabled = true;
             }
@@ -137,14 +172,19 @@ namespace SmartHome
         private void drawGraphs(DateTime date)
         {
             Plotter.Capteur.Series.Clear();
+            Plotter.Capteur.Axes.Clear();
 
-            string box = choiceBox.SelectedItem as string;
-            string lieu = choiceLieu.SelectedItem as string;
+            var box = choiceBox.SelectedItem as string;
+            var lieu = choiceLieu.SelectedItem as string;
+            var grandeur = choiceGrandeur.SelectedItem as string;
+            var min = 0.0;
+            var max = 0.0;
 
             foreach (var capteur in _repository.Capteurs)
             {
                 if (capteur.Box == box
-                    && capteur.Lieu == lieu)
+                    && capteur.Lieu == lieu
+                    && capteur.Grandeur.Nom == grandeur)
                 {
                     var lineSerie = new LineSeries()
                     {
@@ -162,13 +202,46 @@ namespace SmartHome
                             && data.Date.Day == date.Day)
                         {
                             lineSerie.Points.Add(
-                                new OxyPlot.DataPoint(
-                                    DateTimeAxis.ToDouble(data.Date.TimeOfDay),
+                                new DataPoint(
+                                    Axis.ToDouble(data.Date),
                                     data.Valeur
                                 )
                             );
+
+                            if (data.Valeur < min)
+                            {
+                                min = data.Valeur;
+                            }
+
+                            if (data.Valeur > max)
+                            {
+                                max = data.Valeur;
+                            }
                         }
                     }
+
+                    Plotter.Capteur.Title = capteur.Lieu + " (" + capteur.Box  + ")";
+
+                    Plotter.Capteur.Axes.Add(new LinearAxis()
+                    {
+                        Position = AxisPosition.Left,
+                        Minimum = (capteur.Valeur != null ? capteur.Valeur.Min : min) - 10,
+                        Maximum = (capteur.Valeur != null ? capteur.Valeur.Max : max) + 10,
+                        Title = capteur.Grandeur.Unite + "(" + capteur.Grandeur.Abreviation + ")",
+                        PositionAtZeroCrossing = true
+                    });
+
+                    Plotter.Capteur.Axes.Add(new DateTimeAxis()
+                    {
+                        Position = AxisPosition.Bottom,
+                        Title = "Heure",
+                        StringFormat = "HH:mm",
+                        MajorGridlineStyle = LineStyle.Solid,
+                        MinorGridlineStyle = LineStyle.Dot,
+                        MinorIntervalType = DateTimeIntervalType.Hours,
+                        IntervalType = DateTimeIntervalType.Hours,
+                        IntervalLength = 80
+                    });
 
                     Plotter.Capteur.Series.Add(lineSerie);
                     Plotter.Capteur.InvalidatePlot(true);

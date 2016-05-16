@@ -49,3 +49,4 @@ bin/Debug/SmartHome.exe.config
 obj/
 bin/
 Properties/
+*.tmp_proj
