@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<capteurs>
+
+<capteur type="mesure">
+<id>temperaturearrieremaison</id>
+<description>Temperature Extérieure</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<valeur type="double" min="-20" max="70"/>
+<box>netatmo</box>
+<lieu>Exterieur Arrière Maison</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturechambrebeatrice</id>
+<description>Temperature dans la chambre de Beatrice</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>netatmo</box>
+<lieu>Chambre Beatrice</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturecerisiersbeatrice</id>
+<description>Temperature Thermostat chambre Beatrice</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Chambre Beatrice</lieu>
+</capteur>
+
+<capteur type="objectif">
+<id>sp_temperaturecerisiersbeatrice</id>
+<description>Temperature Thermostat chambre Beatrice</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Chambre Beatrice</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturechambrealain</id>
+<description>Temperature dans chambre Alain</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>netatmo</box>
+<lieu>Chambre Alain</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturecerisiersalain</id>
+<description>Temperature Thermostat chambre Alain</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Chambre Alain</lieu>
+</capteur>
+
+<capteur type="objectif">
+<id>sp_temperaturecerisiersalain</id>
+<description>Temperature Objectif dans chambre Alain</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Chambre Alain</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturecuisine</id>
+<description>Temperature dans la cuisine</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>netatmo</box>
+<lieu>Cuisine</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturecerisierscuisin</id>
+<description>Temperature Thermostat Cuisine</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Cuisine</lieu>
+</capteur>
+
+<capteur type="objectif">
+<id>sp_temperaturecerisierscuisin</id>
+<description>Temperature Thermostat Cuisine</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Cuisine</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturesalle</id>
+<description>Temperature dans la Salle</description>
+<box>netatmo</box>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<lieu>Salle</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturecerisierssalle</id>
+<description>Temperature Thermostat Salle</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Salle</lieu>
+</capteur>
+
+<capteur type="objectif">
+<id>sp_temperaturecerisierssalle</id>
+<description>Temperature Thermostat Salle</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Salle</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>boileroffcerisiersbeatrice</id>
+<description>Durée sec - Durée depuis le dernière mesure où le chauffage a été OFF</description>
+<grandeur nom="Chauffage Off" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Chambre Beatrice</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>boileroncerisiersbeatrice</id>
+<description>Durée sec - Durée depuis le dernière mesure où le chauffage a été ON</description>
+<grandeur nom="Chauffage On" unite="Seconde" abreviation="s"/>
+<valeur type="int" min="0" max="1000"/>
+<box>thermostat</box>
+<lieu>Chambre Beatrice</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>boileroffcerisiersalain</id>
+<description>Durée sec - Durée depuis le dernière mesure où le chauffage a été OFF</description>
+<grandeur nom="Chauffage Off" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Chambre Alain</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>boileroncerisiersalain</id>
+<description>Durée depuis le dernière mesure où le chauffage a été ON</description>
+<grandeur nom="Chauffage On" unite="Seconde" abreviation="s"/>
+<valeur type="int" min="0" max="1000"/>
+<box>thermostat</box>
+<lieu>Chambre Alain</lieu>
+</capteur>
+
+
+<capteur type="mesure">
+<id>boileroffcerisierscuisin</id>
+<description>Durée sec - Durée depuis le dernière mesure où le chauffage a été OFF</description>
+<grandeur nom="Chauffage Off" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Cuisine</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>boileroncerisierscuisin</id>
+<description>Durée depuis le dernière mesure où le chauffage a été ON</description>
+<grandeur nom="Chauffage On" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Cuisine</lieu>
+</capteur>
+
+
+<capteur type="mesure">
+<id>boileroffcerisierssalle</id>
+<description>Durée sec - Durée depuis le dernière mesure où le chauffage a été OFF</description>
+<grandeur nom="Chauffage Off" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Salle</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>boileroncerisierssalle</id>
+<description>Durée sec - Durée depuis le dernière mesure où le chauffage a été ON</description>
+<grandeur nom="Chauffage On" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Salle</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>co2chambrebeatrice</id>
+<description>Taux de Co2 dans chambre Beatrice</description>
+<grandeur nom="Co2" unite="TauxCo2" abreviation="ppm"/>
+<box>netatmo</box>
+<lieu>Chambre Beatrice</lieu>
+<seuils>
+<seuil description="Seuil presence co2" valeur="450"/>
+</seuils>
+</capteur>
+
+<capteur type="mesure">
+<id>co2chambrealain</id>
+<description>Taux de Co2 dans chambre Alain</description>
+<grandeur nom="Co2" unite="TauxCo2" abreviation="ppm"/>
+<box>netatmo</box>
+<lieu>Chambre Alain</lieu>
+<seuils>
+<seuil description="Seuil presence co2" valeur="450"/>
+</seuils>
+</capteur>
+
+<capteur type="mesure">
+<id>co2cuisine</id>
+<description>Taux de Co2 dans la cuisine</description>
+<grandeur nom="Co2" unite="TauxCo2" abreviation="ppm"/>
+<box>netatmo</box>
+<lieu>Cuisine</lieu>
+<seuils>
+<seuil description="Seuil presence co2" valeur="450"/>
+</seuils>
+</capteur>
+
+<capteur type="mesure">
+<id>co2salle</id>
+<description>Taux de Co2 dans la salle</description>
+<grandeur nom="Co2" unite="TauxCo2" abreviation="ppm"/>
+<box>netatmo</box>
+<lieu>Salle</lieu>
+<seuils>
+<seuil description="Seuil presence co2" valeur="450"/>
+</seuils>
+</capteur>
+
+
+<capteur type="mesure">
+<id>humidityarrieremaison</id>
+<description>Taux d'humidité à l'exterieur de la maison</description>
+<grandeur nom="Humidité" unite="Pourcentage" abreviation="%"/>
+<box>netatmo</box>
+<lieu>Exterieur</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>humiditychambrebeatrice</id>
+<description>Taux d'humidité dans la chambre Beatrice</description>
+<grandeur nom="Humidité" unite="Pourcentage" abreviation="%"/>
+<box>netatmo</box>
+<lieu>Chambre Beatrice</lieu>
+</capteur>
+
+
+<capteur type="mesure">
+<id>humiditychambrealain</id>
+<description>Taux d'humidité dans la chambre Alain</description>
+<grandeur nom="Humidité" unite="Pourcentage" abreviation="%"/>
+<box>netatmo</box>
+<lieu>Chambre Alain</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>humiditycuisine</id>
+<description>Taux d'humidité dans la cuisine</description>
+<grandeur nom="Humidité" unite="Pourcentage" abreviation="%"/>
+<box>netatmo</box>
+<lieu>Cuisine</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>humiditysalle</id>
+<description>Taux d'humidité dans la salle</description>
+<grandeur nom="Humidité" unite="Pourcentage" abreviation="%"/>
+<box>netatmo</box>
+<lieu>Salle</lieu>
+</capteur>
+
+
+<capteur type="mesure">
+<id>noisesalle</id>
+<description>Niveau sonore dans la Salle</description>
+<grandeur nom="Bruit" unite="décibel" abreviation="dB"/>
+<box>netatmo</box>
+<lieu>Salle</lieu>
+<seuils>
+<seuil description="Inaudible" valeur="35"/>
+</seuils>
+</capteur>
+
+
+<capteur type="mesure">
+<id>pressuresalle</id>
+<description>Pression atmosphérique dans Salle</description>
+<grandeur nom="Pression" unite="Bar" abreviation="mbar"/>
+<box>netatmo</box>
+<lieu>Salle</lieu>
+</capteur>
+
+
+<capteur type="mesure">
+<id>rainpluviomètre</id>
+<description>Niveau dans pluviomètre à l'Exterieur </description>
+<grandeur nom="Pluie" unite="millimètre" abreviation="mm"/>
+<box>netatmo</box>
+<lieu>Exterieur</lieu>
+</capteur>
+
+
+<capteur type="mesure">
+<id>boileroffcerisierspetitemaison</id>
+<description>Durée depuis le dernière mesure où le chauffage a été OFF</description>
+<grandeur nom="Chauffage Off" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Petite Maison</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>boileroncerisierspetitemaison</id>
+<description>Durée depuis le dernière mesure où le chauffage a été ON</description>
+<grandeur nom="Chauffage On" unite="Seconde" abreviation="s"/>
+<box>thermostat</box>
+<lieu>Petite Maison</lieu>
+</capteur>
+
+<capteur type="objectif">
+<id>sp_temperaturecerisierspetitemaison</id>
+<description>Temperature</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Petite Maison</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturepetitemaison</id>
+<description>Temperature dans la Petite Maison</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>Netatmo</box>
+<lieu>Petite Maison</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>temperaturecerisierspetitemaison</id>
+<description>Temperature dans la Petite Maison</description>
+<grandeur nom="Temperature" unite="Celsius" abreviation="C°"/>
+<box>thermostat</box>
+<lieu>Petite Maison</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>humiditypetitemaison</id>
+<description>Taux d'humidité dans la Petite Maison</description>
+<grandeur nom="Humidité" unite="Pourcentage" abreviation="%"/>
+<box>netatmo</box>
+<lieu>Petite Maison</lieu>
+</capteur>
+
+<capteur type="mesure">
+<id>co2petitemaison</id>
+<description>Taux de Co2 dans Petite Maison</description>
+<grandeur nom="Co2" unite="TauxCo2" abreviation="ppm"/>
+<box>netatmo</box>
+<lieu>Petite Maison</lieu>
+</capteur>
+
+
+</capteurs>
+
+
+
