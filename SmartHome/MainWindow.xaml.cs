@@ -1,5 +1,4 @@
 ﻿using SmartHome.Repositories;
-using System.Windows;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using System;
 using System.Linq;
 using OxyPlot;
 using System.Threading;
-using MahApps.Metro.Controls;
 
 namespace SmartHome
 {
@@ -39,7 +37,8 @@ namespace SmartHome
             
             choiceLieu.IsEnabled = false;
             choiceGrandeur.IsEnabled = false;
-            calendar.IsEnabled = false;
+            calendarStart.IsEnabled = false;
+            calendarEnd.IsEnabled = false;
         }
 
         private void choiceBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -139,38 +138,42 @@ namespace SmartHome
                     {
                         if (d.AddDays(-1).Date != dateCounter.Date)
                         {
-                            calendar.BlackoutDates.Add(
+                            calendarStart.BlackoutDates.Add(
                                 new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
                         }
 
                         dateCounter = d;
                     }
 
-                    calendar.DisplayDateStart = firstDate;
-                    calendar.DisplayDateEnd = lastDate;
+                    calendarStart.DisplayDateStart = firstDate;
+                    calendarStart.DisplayDateEnd = lastDate;
                 }
 
-                calendar.IsEnabled = true;
+                calendarStart.IsEnabled = true;
+                calendarEnd.IsEnabled = true;
             }   
             else
             {
-                calendar.IsEnabled = false;
+                calendarStart.IsEnabled = false;
+                calendarEnd.IsEnabled = false;
             }
         }
 
         private void calendar_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var calendar = sender as Calendar;
-            
-            if (calendar.SelectedDate != null)
+            if (calendarStart != null
+                && calendarStart.SelectedDate != null
+                && calendarEnd != null
+                && calendarEnd.SelectedDate != null)
             {
-                var selectedDate = calendar.SelectedDate.Value;
-
-                drawGraphs(selectedDate);
+                drawGraphs(
+                    calendarStart.SelectedDate.Value,
+                    calendarEnd.SelectedDate.Value
+                );
             }
         }
 
-        private void drawGraphs(DateTime date)
+        private void drawGraphs(DateTime startDate, DateTime endDate)
         {
             Plotter.Capteur.Series.Clear();
             Plotter.Capteur.Axes.Clear();
@@ -203,9 +206,8 @@ namespace SmartHome
 
                     foreach (var data in capteur.Datas)
                     {
-                        if (data.Date.Year == date.Year
-                            && data.Date.Month == date.Month
-                            && data.Date.Day == date.Day)
+                        if (data.Date >= startDate
+                                && data.Date <= endDate)
                         {
                             lineSerie.Points.Add(
                                 new DataPoint(
@@ -251,7 +253,7 @@ namespace SmartHome
                     {
                         Position = AxisPosition.Bottom,
                         Title = "Heure",
-                        StringFormat = "HH:mm",
+                        StringFormat = "dddd MM-dd-yyyy HH:mm",
                         MajorGridlineStyle = LineStyle.Solid,
                         MinorGridlineStyle = LineStyle.Dot,
                         MinorIntervalType = DateTimeIntervalType.Hours,

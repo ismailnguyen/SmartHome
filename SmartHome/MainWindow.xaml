@@ -6,9 +6,9 @@
         xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:local="clr-namespace:SmartHome"
         Title="SmartHome Plotter"
-        MinHeight="500"
-        MinWidth="700"
-        Height="600" 
+        MinHeight="800"
+        MinWidth="900"
+        Height="800" 
         Width="1200">
 
     <Window.DataContext>
@@ -31,8 +31,11 @@
         <Label Grid.Column="0" Margin="25,175,0,0" x:Name="labelGrandeur" Content="Grandeur" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <ComboBox Grid.Column="0" Margin="25,200,0,0" x:Name="choiceGrandeur" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" SelectionChanged="choiceGrandeur_SelectionChanged" Grid.ColumnSpan="2"/>
 
-        <Label Grid.Column="0" Margin="25,250,0,0" x:Name="labelDate" Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Calendar Grid.Column="0" Margin="25,275,25,0" x:Name="calendar" VerticalAlignment="Top" SelectedDatesChanged="calendar_SelectionChanged" Grid.ColumnSpan="2"/>
+        <Label Grid.Column="0" Margin="25,250,0,0" Content="Interval start" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Calendar Grid.Column="0" Margin="25,275,25,0" x:Name="calendarStart" VerticalAlignment="Top" SelectedDatesChanged="calendar_SelectionChanged" Grid.ColumnSpan="2"/>
+
+        <Label Grid.Column="0" Margin="25,475,0,0" Content="Interval start" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Calendar Grid.Column="0" Margin="25,500,25,0" x:Name="calendarEnd" VerticalAlignment="Top" SelectedDatesChanged="calendar_SelectionChanged" Grid.ColumnSpan="2"/>
 
         <oxy:PlotView Grid.Column="2" Model="{Binding Capteur}" />
 

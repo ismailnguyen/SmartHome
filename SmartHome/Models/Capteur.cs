@@ -13,6 +13,6 @@ namespace SmartHome.Models
         public string Box { get; set; }
         public string Lieu { get; set; }
         public List<SeuilCapteur> Seuils { get; set; }
-        public List<SmartData> Datas { get; set; }
+        public IEnumerable<SmartData> Datas { get; set; }
     }
 }

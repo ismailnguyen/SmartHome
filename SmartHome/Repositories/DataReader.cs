@@ -4,18 +4,20 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using System.IO;
 using System;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace SmartHome
 {
     public class DataReader
     {
         private XDocument _doc;
-        private string[] _netatmoDatas;
+        private List<string> _netatmoDatas;
 
         public DataReader()
         {
             _doc = XDocument.Load("../../../datas/capteurs.xtim");
-            _netatmoDatas = Directory.GetFiles("../../../datas/netatmo/", "*.dt", SearchOption.AllDirectories);
+            _netatmoDatas = Directory.GetFiles("../../../datas/netatmo/", "*.dt", SearchOption.AllDirectories).ToList();
         }
 
         public List<Capteur> read()
@@ -134,19 +136,17 @@ namespace SmartHome
             return capteurs;
         }
 
-        private List<SmartData> readDatas(string id)
+        private IEnumerable<SmartData> readDatas(string id)
         {
-            var datas = new List<SmartData>();
-
-            foreach (string filePath in _netatmoDatas)
+            foreach (var filePath in _netatmoDatas)
             {
-                foreach (string line in File.ReadLines("@" + Path.Combine(Directory.GetCurrentDirectory(), "\\../" + filePath)))
-                {              
+                foreach (var line in File.ReadLines("@" + Path.Combine(Directory.GetCurrentDirectory(), "\\../" + filePath)))
+                {
                     var elements = line.Split(' ');
 
                     if (elements[2].Equals(id))
                     {
-                        datas.Add(new SmartData()
+                        yield return new SmartData()
                         {
                             Valeur = double.Parse(elements[3]),
                             Date = DateTime.Parse(
@@ -154,12 +154,12 @@ namespace SmartHome
                                 + " "
                                 + elements[1].Substring(0, elements[1].Length - 1)
                             )
-                        });
+                        };
                     }
                 }
             }
 
-            return datas;
+            //return datas;
         }
     }
 }
