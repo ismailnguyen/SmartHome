@@ -22,19 +22,21 @@ namespace SmartHome
 
             _repository = new BaseRepository();
 
-            initFields();
+            InitializeFields();
         }
 
-        private void initFields()
+        private void InitializeFields()
         {
-            foreach (var capteur in _repository.Capteurs)
-            {
-                if (!choiceBox.Items.Contains(capteur.Box))
+            _repository.Capteurs.ForEach(
+                capteur =>
                 {
-                    choiceBox.Items.Add(capteur.Box);
+                    if (!choiceBox.Items.Contains(capteur.Box))
+                    {
+                        choiceBox.Items.Add(capteur.Box);
+                    }
                 }
-            }
-            
+            );
+
             choiceLieu.IsEnabled = false;
             choiceGrandeur.IsEnabled = false;
             calendarStart.IsEnabled = false;
@@ -50,16 +52,18 @@ namespace SmartHome
 
             if (selectedItem != null && selectedItem.Length > 0)
             {
-                foreach (var capteur in _repository.Capteurs)
-                {
-                    if (capteur.Box == selectedItem)
-                    {
-                        if (!choiceLieu.Items.Contains(capteur.Lieu))
+                _repository.Capteurs
+                    .Where(capteur => capteur.Box == selectedItem)
+                    .ToList()
+                    .ForEach(
+                        capteur =>
                         {
-                            choiceLieu.Items.Add(capteur.Lieu);
+                            if (!choiceLieu.Items.Contains(capteur.Lieu))
+                            {
+                                choiceLieu.Items.Add(capteur.Lieu);
+                            }
                         }
-                    }
-                }
+                );
 
                 choiceLieu.IsEnabled = true;
             }
@@ -79,17 +83,18 @@ namespace SmartHome
 
             if (selectedItem != null && selectedItem.Length > 0)
             {
-                foreach (var capteur in _repository.Capteurs)
-                {
-                    if (capteur.Box == box
-                        && capteur.Lieu == selectedItem)
-                    {
-                        if (!choiceGrandeur.Items.Contains(capteur.Grandeur.Nom))
+                _repository.Capteurs
+                    .Where(capteur => capteur.Box == box && capteur.Lieu == selectedItem)
+                    .ToList()
+                    .ForEach(
+                        capteur =>
                         {
-                            choiceGrandeur.Items.Add(capteur.Grandeur.Nom);
+                            if (!choiceGrandeur.Items.Contains(capteur.Grandeur.Nom))
+                            {
+                                choiceGrandeur.Items.Add(capteur.Grandeur.Nom);
+                            }
                         }
-                    }
-                }
+                );
 
                 choiceGrandeur.IsEnabled = true;
             }
@@ -109,31 +114,36 @@ namespace SmartHome
 
             if (selectedItem != null && selectedItem.Length > 0)
             {
-                foreach (var capteur in _repository.Capteurs)
-                {
-                    if (capteur.Box == box
-                        && capteur.Lieu == lieu
-                        && capteur.Grandeur.Nom == selectedItem)
-                    {
-                        foreach (var data in capteur.Datas)
+                _repository.Capteurs
+                    .Where(capteur => capteur.Box == box 
+                            && capteur.Lieu == lieu 
+                            && capteur.Grandeur.Nom == selectedItem)
+                    .ToList()
+                    .ForEach(
+                        capteur =>
                         {
-                            var date = new DateTime(data.Date.Year, data.Date.Month, data.Date.Day);
+                            capteur.Datas
+                            .ToList()
+                            .ForEach(
+                                data =>
+                                {
+                                    var date = new DateTime(data.Date.Year, data.Date.Month, data.Date.Day);
 
-                            if (!dates.Contains(date))
-                            {
-                                dates.Add(date);
-                            }
-                        }
-                    }
-                }
+                                    if (!dates.Contains(date))
+                                    {
+                                        dates.Add(date);
+                                    }
+                                }
+                            );
+                        }    
+                );
 
                 if (dates.Count > 0)
                 {
                     var firstDate = dates.First();
                     var lastDate = dates.Last();
                     var dateCounter = firstDate;
-
-
+                    
                     foreach (var d in dates.Skip(1))
                     {
                         if (d.AddDays(-1).Date != dateCounter.Date)
