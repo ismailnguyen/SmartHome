@@ -3,17 +3,17 @@ using System;
 
 namespace SmartHome.Converters
 {
-    public class TypeCapteurConverter
+    public class SensorTypeConverter
     {
-        public static TypeCapteur convert(String type)
+        public static SensorType convert(string type)
         {
             switch (type)
             {
                 case "mesure":
-                    return TypeCapteur.Mesure;
+                    return SensorType.Measure;
 
                 case "objectif":
-                    return TypeCapteur.Objectif;
+                    return SensorType.Goal;
 
                 default:
                     throw new NotImplementedException();

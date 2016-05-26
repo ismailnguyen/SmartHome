@@ -1,6 +1,6 @@
 ﻿namespace SmartHome.Models
 {
-    public class ValeurCapteur
+    public class SensorValue
     {
         public string Type { get; set; }
         public double Min { get; set; }

@@ -10,16 +10,16 @@ namespace SmartHome
 {
     public class DataReader
     {
-        private XDocument _doc;
-        private List<string> _netatmoDatas;
+        private XDocument _sensors;
+        private List<string> _datas;
         private readonly string _basePath;
 
         public DataReader()
         {
             _basePath = "../../../";
 
-            _doc = XDocument.Load(FileSearch("*.xtim").First());
-            _netatmoDatas = FileSearch("*.dt").ToList();
+            _sensors = XDocument.Load(FileSearch("*.xtim").First());
+            _datas = FileSearch("*.dt").ToList();
         }
 
         private IEnumerable<string> FileSearch(string filename)
@@ -31,30 +31,28 @@ namespace SmartHome
             );
         }
 
-        public List<Capteur> read()
+        public IEnumerable<Sensor> read()
         {
-            var capteurs = readCapteurs();
-
-            capteurs.ForEach(d =>
-                d.Datas = readDatas(d.Id)
-            );
-
-            return capteurs;
+            foreach (var sensor in readSensors())
+            {
+                sensor.Datas = readDatas(sensor.Id);
+                yield return sensor;
+            }
         }
 
-        private List<Capteur> readCapteurs()
+        private List<Sensor> readSensors()
         {
-            var capteurs = new List<Capteur>();
+            var capteurs = new List<Sensor>();
 
-            if (_doc.Descendants("capteurs") != null)
+            if (_sensors.Descendants("capteurs") != null)
             {
-                foreach (XElement node in _doc.Descendants("capteurs").Nodes())
+                foreach (XElement node in _sensors.Descendants("capteurs").Nodes())
                 {
-                    var capteur = new Capteur();
+                    var capteur = new Sensor();
 
                     if (node.Attribute("type") != null)
                     {
-                        capteur.Type = TypeCapteurConverter.convert(node.Attribute("type").Value);
+                        capteur.Type = SensorTypeConverter.convert(node.Attribute("type").Value);
                     }
 
                     if (node.Element("id") != null)
@@ -69,41 +67,41 @@ namespace SmartHome
 
                     if (node.Element("grandeur") != null)
                     {
-                        capteur.Grandeur = new GrandeurCapteur();
+                        capteur.Measure = new SensorMeasure();
 
                         if (node.Element("grandeur").Attribute("nom") != null)
                         {
-                            capteur.Grandeur.Nom = node.Element("grandeur").Attribute("nom").Value;
+                            capteur.Measure.Name = node.Element("grandeur").Attribute("nom").Value;
                         }
 
                         if (node.Element("grandeur").Attribute("unite") != null)
                         {
-                            capteur.Grandeur.Unite = node.Element("grandeur").Attribute("unite").Value;
+                            capteur.Measure.Unit = node.Element("grandeur").Attribute("unite").Value;
                         }
 
                         if (node.Element("grandeur").Attribute("abreviation") != null)
                         {
-                            capteur.Grandeur.Abreviation = node.Element("grandeur").Attribute("abreviation").Value;
+                            capteur.Measure.Abbreviation = node.Element("grandeur").Attribute("abreviation").Value;
                         }
                     }
 
                     if (node.Element("valeur") != null)
                     {
-                        capteur.Valeur = new ValeurCapteur();
+                        capteur.Value = new SensorValue();
 
                         if (node.Element("valeur").Attribute("type") != null)
                         {
-                            capteur.Valeur.Type = node.Element("valeur").Attribute("type").Value;
+                            capteur.Value.Type = node.Element("valeur").Attribute("type").Value;
                         }
 
                         if (node.Element("valeur").Attribute("min") != null)
                         {
-                            capteur.Valeur.Min = double.Parse(node.Element("valeur").Attribute("min").Value);
+                            capteur.Value.Min = double.Parse(node.Element("valeur").Attribute("min").Value);
                         }
 
                         if (node.Element("valeur").Attribute("max") != null)
                         {
-                            capteur.Valeur.Max = double.Parse(node.Element("valeur").Attribute("max").Value);
+                            capteur.Value.Max = double.Parse(node.Element("valeur").Attribute("max").Value);
                         }
                     }
 
@@ -114,7 +112,7 @@ namespace SmartHome
 
                     if (node.Element("lieu") != null)
                     {
-                        capteur.Lieu = node.Element("lieu").Value;
+                        capteur.Place = node.Element("lieu").Value;
                     }
 
                     if (node.Descendants("seuils") != null)
@@ -123,7 +121,7 @@ namespace SmartHome
                         {
                             if (nodeSeuil.Document.Element("seuil") != null)
                             {
-                                var seuil = new SeuilCapteur();
+                                var seuil = new SensorTreshold();
 
                                 if (nodeSeuil.Document.Element("seuil").Attribute("description") != null)
                                 {
@@ -132,10 +130,10 @@ namespace SmartHome
 
                                 if (nodeSeuil.Document.Element("seuil").Attribute("valeur") != null)
                                 {
-                                    seuil.Valeur = double.Parse(nodeSeuil.Document.Element("seuil").Attribute("valeur").Value);
+                                    seuil.Value = double.Parse(nodeSeuil.Document.Element("seuil").Attribute("valeur").Value);
                                 }
 
-                                capteur.Seuils.Add(seuil);
+                                capteur.Tresholds.Add(seuil);
                             }
                         }
                     }
@@ -149,7 +147,7 @@ namespace SmartHome
 
         private IEnumerable<SmartData> readDatas(string id)
         {
-            foreach (var filePath in _netatmoDatas)
+            foreach (var filePath in _datas)
             {
                 foreach (var line in File.ReadLines("@" + Path.Combine(Directory.GetCurrentDirectory(), "\\../" + filePath)))
                 {
@@ -159,7 +157,7 @@ namespace SmartHome
                     {
                         yield return new SmartData()
                         {
-                            Valeur = double.Parse(elements[3]),
+                            Value = double.Parse(elements[3]),
                             Date = DateTime.Parse(
                                 elements[0].Substring(1)
                                 + " "
@@ -169,8 +167,6 @@ namespace SmartHome
                     }
                 }
             }
-
-            //return datas;
         }
     }
 }

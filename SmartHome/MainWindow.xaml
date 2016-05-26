@@ -26,10 +26,10 @@
         <ComboBox Grid.Column="0" Margin="25,50,0,0" x:Name="choiceBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" SelectionChanged="choiceBox_SelectionChanged" Grid.ColumnSpan="2"/>
 
         <Label Grid.Column="0" Margin="25,100,0,0" x:Name="labelLieu" Content="Place" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <ComboBox Grid.Column="0" Margin="25,125,0,0" x:Name="choiceLieu" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" SelectionChanged="choiceLieu_SelectionChanged" Grid.ColumnSpan="2"/>
+        <ComboBox Grid.Column="0" Margin="25,125,0,0" x:Name="choicePlace" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" SelectionChanged="choiceLieu_SelectionChanged" Grid.ColumnSpan="2"/>
 
         <Label Grid.Column="0" Margin="25,175,0,0" x:Name="labelGrandeur" Content="Measure" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <ComboBox Grid.Column="0" Margin="25,200,0,0" x:Name="choiceGrandeur" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" SelectionChanged="choiceGrandeur_SelectionChanged" Grid.ColumnSpan="2"/>
+        <ComboBox Grid.Column="0" Margin="25,200,0,0" x:Name="choiceMeasure" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" SelectionChanged="choiceGrandeur_SelectionChanged" Grid.ColumnSpan="2"/>
 
         <Label Grid.Column="0" Margin="25,250,0,0" Content="Interval start" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Calendar Grid.Column="0" Margin="25,275,25,0" x:Name="calendarStart" VerticalAlignment="Top" SelectedDatesChanged="calendar_SelectionChanged" Grid.ColumnSpan="2"/>
@@ -37,7 +37,7 @@
         <Label Grid.Column="0" Margin="25,475,0,0" Content="Interval end" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Calendar Grid.Column="0" Margin="25,500,25,0" x:Name="calendarEnd" VerticalAlignment="Top" SelectedDatesChanged="calendar_SelectionChanged" Grid.ColumnSpan="2"/>
 
-        <oxy:PlotView Grid.Column="2" Model="{Binding Capteur}" Background="DarkGray" />
+        <oxy:PlotView Grid.Column="2" Model="{Binding Sensor}" Background="DarkGray" />
 
     </Grid>
 </Controls:MetroWindow>

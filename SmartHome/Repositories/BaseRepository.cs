@@ -6,12 +6,12 @@ namespace SmartHome.Repositories
     public class BaseRepository
     {
         private DataReader _dataReader;
-        public List<Capteur> Capteurs { get; set; }
+        public IEnumerable<Sensor> Sensors { get; set; }
 
         public BaseRepository()
         {
             _dataReader = new DataReader();
-            Capteurs = _dataReader.read();
+            Sensors = _dataReader.read();
         }
     }
 }

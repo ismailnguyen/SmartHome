@@ -1,8 +1,8 @@
 ﻿namespace SmartHome.Models
 {
-    public class SeuilCapteur
+    public class SensorTreshold
     {
         public string Description { get; set; }
-        public double Valeur { get; set; }
+        public double Value { get; set; }
     }
 }

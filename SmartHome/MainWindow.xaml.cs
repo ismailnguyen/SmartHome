@@ -23,11 +23,14 @@ namespace SmartHome
             _repository = new BaseRepository();
 
             InitializeFields();
+            InitializeCalendars();
         }
 
         private void InitializeFields()
         {
-            _repository.Capteurs.ForEach(
+            _repository.Sensors
+                .ToList()
+                .ForEach(
                 capteur =>
                 {
                     if (!choiceBox.Items.Contains(capteur.Box))
@@ -37,45 +40,102 @@ namespace SmartHome
                 }
             );
 
-            choiceLieu.IsEnabled = false;
-            choiceGrandeur.IsEnabled = false;
-            calendarStart.IsEnabled = false;
-            calendarEnd.IsEnabled = false;
+            choicePlace.IsEnabled = false;
+            choiceMeasure.IsEnabled = false;
+        }
+
+        private void InitializeCalendars()
+        {
+            var dates = new List<DateTime>();
+
+            _repository.Sensors
+                .ToList()
+                .ForEach(
+                    capteur =>
+                    {
+                        capteur.Datas
+                        .ToList()
+                        .ForEach(
+                            data =>
+                            {
+                                var date = new DateTime(data.Date.Year, data.Date.Month, data.Date.Day);
+
+                                if (!dates.Contains(date))
+                                {
+                                    dates.Add(date);
+                                }
+                            }
+                        );
+                    }
+            );
+
+            SetupCalendars(dates);
+        }
+        
+        private void SetupCalendars(List<DateTime> dates)
+        {
+            if (dates.Count > 0)
+            {
+                var firstDate = dates.First();
+                var lastDate = dates.First().AddDays(1);
+                var dateCounter = firstDate;
+
+                foreach (var d in dates.Skip(1))
+                {
+                    if (d.AddDays(-1).Date != dateCounter.Date)
+                    {
+                        calendarStart.BlackoutDates.Add(
+                            new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
+
+                        calendarEnd.BlackoutDates.Add(
+                            new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
+                    }
+
+                    dateCounter = d;
+                }
+
+                // Set calendars default date from start and end of existing datas dates
+                calendarStart.SelectedDate = firstDate;
+                calendarStart.DisplayDate = firstDate;
+
+                calendarEnd.SelectedDate = lastDate;
+                calendarEnd.DisplayDate = lastDate;
+            }
         }
 
         private void choiceBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            choiceLieu.Items.Clear();
+            choicePlace.Items.Clear();
 
             var choice = sender as ComboBox;
             var selectedItem = choice.SelectedItem as string;
 
             if (selectedItem != null && selectedItem.Length > 0)
             {
-                _repository.Capteurs
+                _repository.Sensors
                     .Where(capteur => capteur.Box == selectedItem)
                     .ToList()
                     .ForEach(
                         capteur =>
                         {
-                            if (!choiceLieu.Items.Contains(capteur.Lieu))
+                            if (!choicePlace.Items.Contains(capteur.Place))
                             {
-                                choiceLieu.Items.Add(capteur.Lieu);
+                                choicePlace.Items.Add(capteur.Place);
                             }
                         }
                 );
 
-                choiceLieu.IsEnabled = true;
+                choicePlace.IsEnabled = true;
             }
             else
             {   
-                choiceLieu.IsEnabled = false;
+                choicePlace.IsEnabled = false;
             }
         }
 
         private void choiceLieu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            choiceGrandeur.Items.Clear();
+            choiceMeasure.Items.Clear();
 
             var choice = sender as ComboBox;
             var selectedItem = choice.SelectedItem as string;
@@ -83,24 +143,24 @@ namespace SmartHome
 
             if (selectedItem != null && selectedItem.Length > 0)
             {
-                _repository.Capteurs
-                    .Where(capteur => capteur.Box == box && capteur.Lieu == selectedItem)
+                _repository.Sensors
+                    .Where(capteur => capteur.Box == box && capteur.Place == selectedItem)
                     .ToList()
                     .ForEach(
                         capteur =>
                         {
-                            if (!choiceGrandeur.Items.Contains(capteur.Grandeur.Nom))
+                            if (!choiceMeasure.Items.Contains(capteur.Measure.Name))
                             {
-                                choiceGrandeur.Items.Add(capteur.Grandeur.Nom);
+                                choiceMeasure.Items.Add(capteur.Measure.Name);
                             }
                         }
                 );
 
-                choiceGrandeur.IsEnabled = true;
+                choiceMeasure.IsEnabled = true;
             }
             else
             {
-                choiceGrandeur.IsEnabled = false;
+                choiceMeasure.IsEnabled = false;
             }
         }
 
@@ -109,15 +169,15 @@ namespace SmartHome
             var choice = sender as ComboBox;
             var selectedItem = choice.SelectedItem as string;
             string box = choiceBox.SelectedItem as string;
-            string lieu = choiceLieu.SelectedItem as string;
+            string lieu = choicePlace.SelectedItem as string;
             var dates = new List<DateTime>();
 
             if (selectedItem != null && selectedItem.Length > 0)
             {
-                _repository.Capteurs
+                _repository.Sensors
                     .Where(capteur => capteur.Box == box 
-                            && capteur.Lieu == lieu 
-                            && capteur.Grandeur.Nom == selectedItem)
+                            && capteur.Place == lieu 
+                            && capteur.Measure.Name == selectedItem)
                     .ToList()
                     .ForEach(
                         capteur =>
@@ -138,74 +198,44 @@ namespace SmartHome
                         }    
                 );
 
-                if (dates.Count > 0)
-                {
-                    var firstDate = dates.First();
-                    var lastDate = dates.Last();
-                    var dateCounter = firstDate;
-                    
-                    foreach (var d in dates.Skip(1))
-                    {
-                        if (d.AddDays(-1).Date != dateCounter.Date)
-                        {
-                            calendarStart.BlackoutDates.Add(
-                                new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
-
-                            calendarEnd.BlackoutDates.Add(
-                                new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
-                        }
-
-                        dateCounter = d;
-                    }
-                    
-                    // Set calendars default date from start and end of existing datas dates
-                    calendarStart.SelectedDate = firstDate;
-                    calendarStart.DisplayDate = firstDate;
-
-                    calendarEnd.SelectedDate = lastDate;
-                    calendarEnd.DisplayDate = lastDate;
-                }
-
-                calendarStart.IsEnabled = true;
-                calendarEnd.IsEnabled = true;
-            }   
-            else
-            {
-                calendarStart.IsEnabled = false;
-                calendarEnd.IsEnabled = false;
+                SetupCalendars(dates);
+                drawGraphs();
             }
         }
 
         private void calendar_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            drawGraphs();
+        }
+
+        private void drawGraphs()
         {
             if (calendarStart != null
                 && calendarStart.SelectedDate != null
                 && calendarEnd != null
                 && calendarEnd.SelectedDate != null)
             {
-                drawGraphs(
-                    calendarStart.SelectedDate.Value,
-                    calendarEnd.SelectedDate.Value
+                var startDate = calendarStart.SelectedDate.Value;
+                var endDate = calendarEnd.SelectedDate.Value;
+            
+
+                Plotter.Sensor.Series.Clear();
+                Plotter.Sensor.Axes.Clear();
+
+                var box = choiceBox.SelectedItem as string;
+                var place = choicePlace.SelectedItem as string;
+                var measure = choiceMeasure.SelectedItem as string;
+                var min = 0.0;
+                var max = 0.0;
+
+                var capteurs = _repository.Sensors
+                    .Where(capteur =>
+                        (box != null && capteur.Box == box)
+                        && (place != null && capteur.Place == place)
+                        && (measure != null && capteur.Measure.Name == measure)
                 );
-            }
-        }
 
-        private void drawGraphs(DateTime startDate, DateTime endDate)
-        {
-            Plotter.Capteur.Series.Clear();
-            Plotter.Capteur.Axes.Clear();
-
-            var box = choiceBox.SelectedItem as string;
-            var lieu = choiceLieu.SelectedItem as string;
-            var grandeur = choiceGrandeur.SelectedItem as string;
-            var min = 0.0;
-            var max = 0.0;
-
-            foreach (var capteur in _repository.Capteurs)
-            {
-                if (capteur.Box == box
-                    && capteur.Lieu == lieu
-                    && capteur.Grandeur.Nom == grandeur)
+                foreach (var capteur in capteurs)
                 {
                     var lineSerie = new LineSeries()
                     {
@@ -217,8 +247,8 @@ namespace SmartHome
                     };
 
                     var seuilSerie = new LineSeries();
-                    var seuil = capteur.Seuils != null && capteur.Seuils.Count() > 0
-                        ? capteur.Seuils.Average(x => x.Valeur) 
+                    var seuil = capteur.Tresholds != null && capteur.Tresholds.Count() > 0
+                        ? capteur.Tresholds.Average(x => x.Value) 
                         : 0;
 
                     foreach (var data in capteur.Datas)
@@ -229,7 +259,7 @@ namespace SmartHome
                             lineSerie.Points.Add(
                                 new DataPoint(
                                     Axis.ToDouble(data.Date),
-                                    data.Valeur
+                                    data.Value
                                 )
                             );
 
@@ -243,30 +273,30 @@ namespace SmartHome
                                     );
                             }
 
-                            if (data.Valeur < min)
+                            if (data.Value < min)
                             {
-                                min = data.Valeur;
+                                min = data.Value;
                             }
 
-                            if (data.Valeur > max)
+                            if (data.Value > max)
                             {
-                                max = data.Valeur;
+                                max = data.Value;
                             }
                         }
                     }
 
-                    Plotter.Capteur.Title = capteur.Lieu + " (" + capteur.Box  + ")";
+                    Plotter.Sensor.Title = capteur.Place + " (" + capteur.Box  + ")";
 
-                    Plotter.Capteur.Axes.Add(new LinearAxis()
+                    Plotter.Sensor.Axes.Add(new LinearAxis()
                     {
                         Position = AxisPosition.Left,
-                        Minimum = (capteur.Valeur != null ? capteur.Valeur.Min : min) - 10,
-                        Maximum = (capteur.Valeur != null ? capteur.Valeur.Max : max) + 10,
-                        Title = capteur.Grandeur.Unite + "(" + capteur.Grandeur.Abreviation + ")",
+                        Minimum = (capteur.Value != null ? capteur.Value.Min : min) - 10,
+                        Maximum = (capteur.Value != null ? capteur.Value.Max : max) + 10,
+                        Title = capteur.Measure.Unit + "(" + capteur.Measure.Abbreviation + ")",
                         PositionAtZeroCrossing = true
                     });
 
-                    Plotter.Capteur.Axes.Add(new DateTimeAxis()
+                    Plotter.Sensor.Axes.Add(new DateTimeAxis()
                     {
                         Position = AxisPosition.Bottom,
                         Title = "Date",
@@ -278,14 +308,14 @@ namespace SmartHome
                         IntervalLength = 80
                     });
 
-                    Plotter.Capteur.Series.Add(lineSerie);
+                    Plotter.Sensor.Series.Add(lineSerie);
 
                     if (seuilSerie.Points.Count > 0)
                     {
-                        Plotter.Capteur.Series.Add(seuilSerie);
+                        Plotter.Sensor.Series.Add(seuilSerie);
                     }
 
-                    Plotter.Capteur.InvalidatePlot(true);
+                    Plotter.Sensor.InvalidatePlot(true);
                 }
             }
         }

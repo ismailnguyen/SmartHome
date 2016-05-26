@@ -84,9 +84,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\TypeCapteurConverter.cs" />
+    <Compile Include="Converters\SensorTypeConverter.cs" />
     <Compile Include="Repositories\DataReader.cs" />
-    <Compile Include="Enums\TypeCapteur.cs" />
+    <Compile Include="Enums\SensorType.cs" />
     <Compile Include="ViewModel\Plotter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -94,11 +94,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Capteur.cs" />
-    <Compile Include="Models\GrandeurCapteur.cs" />
-    <Compile Include="Models\SeuilCapteur.cs" />
+    <Compile Include="Models\Sensor.cs" />
+    <Compile Include="Models\SensorMeasure.cs" />
+    <Compile Include="Models\SensorTreshold.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
-    <Compile Include="Models\ValeurCapteur.cs" />
+    <Compile Include="Models\SensorValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
