@@ -150,13 +150,20 @@ namespace SmartHome
                         {
                             calendarStart.BlackoutDates.Add(
                                 new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
+
+                            calendarEnd.BlackoutDates.Add(
+                                new CalendarDateRange(dateCounter.AddDays(1), d.AddDays(-1)));
                         }
 
                         dateCounter = d;
                     }
+                    
+                    // Set calendars default date from start and end of existing datas dates
+                    calendarStart.SelectedDate = firstDate;
+                    calendarStart.DisplayDate = firstDate;
 
-                    calendarStart.DisplayDateStart = firstDate;
-                    calendarStart.DisplayDateEnd = lastDate;
+                    calendarEnd.SelectedDate = lastDate;
+                    calendarEnd.DisplayDate = lastDate;
                 }
 
                 calendarStart.IsEnabled = true;
@@ -262,7 +269,7 @@ namespace SmartHome
                     Plotter.Capteur.Axes.Add(new DateTimeAxis()
                     {
                         Position = AxisPosition.Bottom,
-                        Title = "Heure",
+                        Title = "Date",
                         StringFormat = "dddd MM-dd-yyyy HH:mm",
                         MajorGridlineStyle = LineStyle.Solid,
                         MinorGridlineStyle = LineStyle.Dot,
