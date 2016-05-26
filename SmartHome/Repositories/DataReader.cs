@@ -12,11 +12,23 @@ namespace SmartHome
     {
         private XDocument _doc;
         private List<string> _netatmoDatas;
+        private readonly string _basePath;
 
         public DataReader()
         {
-            _doc = XDocument.Load("../../../datas/capteurs.xtim");
-            _netatmoDatas = Directory.GetFiles("../../../datas/netatmo/", "*.dt", SearchOption.AllDirectories).ToList();
+            _basePath = "../../../";
+
+            _doc = XDocument.Load(FileSearch("*.xtim").First());
+            _netatmoDatas = FileSearch("*.dt").ToList();
+        }
+
+        private IEnumerable<string> FileSearch(string filename)
+        {
+            return Directory.GetFiles(
+                _basePath,
+                filename,
+                SearchOption.AllDirectories
+            );
         }
 
         public List<Capteur> read()
