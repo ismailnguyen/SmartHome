@@ -1,17 +1,15 @@
-﻿<Window 
+﻿<Controls:MetroWindow 
         x:Class="SmartHome.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:local="clr-namespace:SmartHome"
-        Title="Plotter"
+        Title="SmartHome Plotter"
         MinHeight="500"
         MinWidth="700"
         Height="600" 
-        Width="1200" Background="#FF4F6DA2" Foreground="White">
-
-
-
+        Width="1200">
 
     <Window.DataContext>
         <local:Plotter />
@@ -23,7 +21,6 @@
             <ColumnDefinition Width="105"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
 
         <Label Grid.Column="0" Margin="25,25,0,0" x:Name="labelBox" Content="Box" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <ComboBox Grid.Column="0" Margin="25,50,0,0" x:Name="choiceBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" SelectionChanged="choiceBox_SelectionChanged" Grid.ColumnSpan="2"/>
@@ -37,7 +34,7 @@
         <Label Grid.Column="0" Margin="25,250,0,0" x:Name="labelDate" Content="Date" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Calendar Grid.Column="0" Margin="25,275,25,0" x:Name="calendar" VerticalAlignment="Top" SelectedDatesChanged="calendar_SelectionChanged" Grid.ColumnSpan="2"/>
 
-        <oxy:PlotView Grid.Column="2" Model="{Binding Capteur}" Background="#FFE7F0FF" Foreground="White"/>
+        <oxy:PlotView Grid.Column="2" Model="{Binding Capteur}" />
 
     </Grid>
-</Window>
+</Controls:MetroWindow>

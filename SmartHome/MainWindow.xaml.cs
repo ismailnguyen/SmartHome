@@ -8,13 +8,11 @@ using System;
 using System.Linq;
 using OxyPlot;
 using System.Threading;
+using MahApps.Metro.Controls;
 
 namespace SmartHome
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private BaseRepository _repository;
         
