@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System;
 using System.Linq;
 using OxyPlot;
+using System.Threading;
 
 namespace SmartHome
 {
@@ -19,6 +20,8 @@ namespace SmartHome
         
         public MainWindow()
         {
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("fr");
+
             InitializeComponent();
 
             _repository = new BaseRepository();
@@ -150,7 +153,7 @@ namespace SmartHome
                 }
 
                 calendar.IsEnabled = true;
-            }
+            }   
             else
             {
                 calendar.IsEnabled = false;
@@ -195,6 +198,11 @@ namespace SmartHome
                         Smooth = false,
                     };
 
+                    var seuilSerie = new LineSeries();
+                    var seuil = capteur.Seuils != null && capteur.Seuils.Count() > 0
+                        ? capteur.Seuils.Average(x => x.Valeur) 
+                        : 0;
+
                     foreach (var data in capteur.Datas)
                     {
                         if (data.Date.Year == date.Year
@@ -207,6 +215,16 @@ namespace SmartHome
                                     data.Valeur
                                 )
                             );
+
+                            if (seuil != 0)
+                            {
+                                seuilSerie.Points.Add(
+                                    new DataPoint(
+                                        Axis.ToDouble(data.Date),
+                                        seuil
+                                        )
+                                    );
+                            }
 
                             if (data.Valeur < min)
                             {
@@ -244,6 +262,12 @@ namespace SmartHome
                     });
 
                     Plotter.Capteur.Series.Add(lineSerie);
+
+                    if (seuilSerie.Points.Count > 0)
+                    {
+                        Plotter.Capteur.Series.Add(seuilSerie);
+                    }
+
                     Plotter.Capteur.InvalidatePlot(true);
                 }
             }

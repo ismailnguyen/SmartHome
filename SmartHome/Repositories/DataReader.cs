@@ -148,7 +148,7 @@ namespace SmartHome
                     {
                         datas.Add(new SmartData()
                         {
-                            Valeur = double.Parse(elements[3].Replace(',', '.')),
+                            Valeur = double.Parse(elements[3]),
                             Date = DateTime.Parse(
                                 elements[0].Substring(1)
                                 + " "
